@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:atproto/core.dart' as $atp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/entity/bluesky/bluesky_post.dart';
-import 'package:skysoda/entity/bluesky/bluesky_profile.dart';
+import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
 import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/bluesky/blueksy_post_pod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_profile_pod.dart';
+import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyTimeline =
@@ -28,12 +28,12 @@ class BlueskyTimelinePod extends AsyncNotifier<List<$atp.AtUri>> {
     final data = await bluesky.feed.getTimeline();
     for (final fv in data.data.feed) {
       final post = BlueskyPost.fromPost(fv.post);
-      final author = BlueskyProfile.fromActorBasic(fv.post.author);
+      final author = BlueskyActor.fromActorBasic(fv.post.author);
       ref
           .read(podBlueskyPostCache(fv.post.uri).notifier)
           .state = AsyncValue.data(post);
       ref
-          .read(podBlueskyProfileCache(fv.post.author.did).notifier)
+          .read(podBlueskyActorCache(fv.post.author.did).notifier)
           .state = AsyncValue.data(author);
     }
     return data.data.feed.map((e) => e.post.uri).toList();

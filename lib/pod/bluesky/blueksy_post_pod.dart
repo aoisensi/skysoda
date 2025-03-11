@@ -4,9 +4,9 @@ import 'package:atproto/core.dart' as $atp;
 import 'package:bluesky/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/entity/bluesky/bluesky_post.dart';
-import 'package:skysoda/entity/bluesky/bluesky_profile.dart';
+import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
 import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_profile_pod.dart';
+import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyPost = AsyncNotifierProvider.autoDispose
@@ -47,12 +47,12 @@ class BlueskyPostNotifier
       final data = await bluesky.feed.getPosts(uris: uris);
       for (final data in data.data.posts) {
         final post = BlueskyPost.fromPost(data);
-        final profile = BlueskyProfile.fromActorBasic(data.author);
+        final profile = BlueskyActor.fromActorBasic(data.author);
         ref.watch(podBlueskyPostCache(data.uri).notifier).state = AsyncData(
           post,
         );
         ref
-            .watch(podBlueskyProfileCache(data.author.did).notifier)
+            .watch(podBlueskyActorCache(data.author.did).notifier)
             .state = AsyncData(profile);
       }
     } catch (error, stackTrace) {

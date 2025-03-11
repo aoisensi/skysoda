@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'bluesky_profile.dart';
+part of 'bluesky_actor.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -16,40 +16,40 @@ final _privateConstructorUsedError = UnsupportedError(
 );
 
 /// @nodoc
-mixin _$BlueskyProfile {
+mixin _$BlueskyActor {
   String get did => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get avatar => throw _privateConstructorUsedError;
   String get handle => throw _privateConstructorUsedError;
 
-  /// Create a copy of BlueskyProfile
+  /// Create a copy of BlueskyActor
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $BlueskyProfileCopyWith<BlueskyProfile> get copyWith =>
+  $BlueskyActorCopyWith<BlueskyActor> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BlueskyProfileCopyWith<$Res> {
-  factory $BlueskyProfileCopyWith(
-    BlueskyProfile value,
-    $Res Function(BlueskyProfile) then,
-  ) = _$BlueskyProfileCopyWithImpl<$Res, BlueskyProfile>;
+abstract class $BlueskyActorCopyWith<$Res> {
+  factory $BlueskyActorCopyWith(
+    BlueskyActor value,
+    $Res Function(BlueskyActor) then,
+  ) = _$BlueskyActorCopyWithImpl<$Res, BlueskyActor>;
   @useResult
   $Res call({String did, String displayName, String avatar, String handle});
 }
 
 /// @nodoc
-class _$BlueskyProfileCopyWithImpl<$Res, $Val extends BlueskyProfile>
-    implements $BlueskyProfileCopyWith<$Res> {
-  _$BlueskyProfileCopyWithImpl(this._value, this._then);
+class _$BlueskyActorCopyWithImpl<$Res, $Val extends BlueskyActor>
+    implements $BlueskyActorCopyWith<$Res> {
+  _$BlueskyActorCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of BlueskyProfile
+  /// Create a copy of BlueskyActor
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -88,27 +88,27 @@ class _$BlueskyProfileCopyWithImpl<$Res, $Val extends BlueskyProfile>
 }
 
 /// @nodoc
-abstract class _$$BlueskyProfileImplCopyWith<$Res>
-    implements $BlueskyProfileCopyWith<$Res> {
-  factory _$$BlueskyProfileImplCopyWith(
-    _$BlueskyProfileImpl value,
-    $Res Function(_$BlueskyProfileImpl) then,
-  ) = __$$BlueskyProfileImplCopyWithImpl<$Res>;
+abstract class _$$BlueskyActorImplCopyWith<$Res>
+    implements $BlueskyActorCopyWith<$Res> {
+  factory _$$BlueskyActorImplCopyWith(
+    _$BlueskyActorImpl value,
+    $Res Function(_$BlueskyActorImpl) then,
+  ) = __$$BlueskyActorImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String did, String displayName, String avatar, String handle});
 }
 
 /// @nodoc
-class __$$BlueskyProfileImplCopyWithImpl<$Res>
-    extends _$BlueskyProfileCopyWithImpl<$Res, _$BlueskyProfileImpl>
-    implements _$$BlueskyProfileImplCopyWith<$Res> {
-  __$$BlueskyProfileImplCopyWithImpl(
-    _$BlueskyProfileImpl _value,
-    $Res Function(_$BlueskyProfileImpl) _then,
+class __$$BlueskyActorImplCopyWithImpl<$Res>
+    extends _$BlueskyActorCopyWithImpl<$Res, _$BlueskyActorImpl>
+    implements _$$BlueskyActorImplCopyWith<$Res> {
+  __$$BlueskyActorImplCopyWithImpl(
+    _$BlueskyActorImpl _value,
+    $Res Function(_$BlueskyActorImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of BlueskyProfile
+  /// Create a copy of BlueskyActor
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -119,7 +119,7 @@ class __$$BlueskyProfileImplCopyWithImpl<$Res>
     Object? handle = null,
   }) {
     return _then(
-      _$BlueskyProfileImpl(
+      _$BlueskyActorImpl(
         did:
             null == did
                 ? _value.did
@@ -147,8 +147,8 @@ class __$$BlueskyProfileImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BlueskyProfileImpl implements _BlueskyProfile {
-  const _$BlueskyProfileImpl({
+class _$BlueskyActorImpl implements _BlueskyActor {
+  const _$BlueskyActorImpl({
     required this.did,
     required this.displayName,
     required this.avatar,
@@ -166,14 +166,14 @@ class _$BlueskyProfileImpl implements _BlueskyProfile {
 
   @override
   String toString() {
-    return 'BlueskyProfile(did: $did, displayName: $displayName, avatar: $avatar, handle: $handle)';
+    return 'BlueskyActor(did: $did, displayName: $displayName, avatar: $avatar, handle: $handle)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BlueskyProfileImpl &&
+            other is _$BlueskyActorImpl &&
             (identical(other.did, did) || other.did == did) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
@@ -185,25 +185,22 @@ class _$BlueskyProfileImpl implements _BlueskyProfile {
   int get hashCode =>
       Object.hash(runtimeType, did, displayName, avatar, handle);
 
-  /// Create a copy of BlueskyProfile
+  /// Create a copy of BlueskyActor
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$BlueskyProfileImplCopyWith<_$BlueskyProfileImpl> get copyWith =>
-      __$$BlueskyProfileImplCopyWithImpl<_$BlueskyProfileImpl>(
-        this,
-        _$identity,
-      );
+  _$$BlueskyActorImplCopyWith<_$BlueskyActorImpl> get copyWith =>
+      __$$BlueskyActorImplCopyWithImpl<_$BlueskyActorImpl>(this, _$identity);
 }
 
-abstract class _BlueskyProfile implements BlueskyProfile {
-  const factory _BlueskyProfile({
+abstract class _BlueskyActor implements BlueskyActor {
+  const factory _BlueskyActor({
     required final String did,
     required final String displayName,
     required final String avatar,
     required final String handle,
-  }) = _$BlueskyProfileImpl;
+  }) = _$BlueskyActorImpl;
 
   @override
   String get did;
@@ -214,10 +211,10 @@ abstract class _BlueskyProfile implements BlueskyProfile {
   @override
   String get handle;
 
-  /// Create a copy of BlueskyProfile
+  /// Create a copy of BlueskyActor
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BlueskyProfileImplCopyWith<_$BlueskyProfileImpl> get copyWith =>
+  _$$BlueskyActorImplCopyWith<_$BlueskyActorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
