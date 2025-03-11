@@ -2,7 +2,7 @@ import 'package:atproto/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_subscribe_pod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_timeline_pod.dart';
+import 'package:skysoda/pod/bluesky/bluesky_feed_pod.dart';
 import 'package:skysoda/widget/page/home/cell/cell_post_view.dart';
 
 class ColumnTimelineHomeView extends _ColumnTimelineView {
