@@ -2,7 +2,7 @@ import 'package:atproto/core.dart' as $atp;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/pod/bluesky/blueksy_post_pod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
+import 'package:skysoda/widget/page/home/view/actor_tile_view.dart';
 
 class CellPostView extends ConsumerWidget {
   const CellPostView(this.uri, {super.key});
@@ -19,24 +19,7 @@ class CellPostView extends ConsumerWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ref
-                      .watch(podBlueskyActor(post.authorDid))
-                      .when(
-                        data:
-                            (profile) => ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(profile.avatar),
-                              ),
-                              title: Text(profile.displayName),
-                              subtitle: Text(profile.handle),
-                            ),
-                        error:
-                            (error, st) =>
-                                ListTile(title: Text(error.toString())),
-                        loading:
-                            () =>
-                                ListTile(leading: CircularProgressIndicator()),
-                      ),
+                  ActorTileView(post.authorDid),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                     child: Text(post.text),
