@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/entity/bluesky/bluesky_profile.dart';
+import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyProfile = AsyncNotifierProvider.autoDispose
     .family<BlueskyProfileNotifier, BlueskyProfile, String>(
       BlueskyProfileNotifier.new,
+      dependencies: [podAtprotoDid, podAtproto, podBluesky],
     );
 
 class BlueskyProfileNotifier
