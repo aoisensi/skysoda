@@ -23,13 +23,14 @@ class ActorTileView extends ConsumerWidget {
                       )
                       : CircleAvatar(
                         child: Text(
-                          profile.displayName.substring(
-                            0,
-                            min(2, profile.displayName.length),
-                          ),
+                          profile.displayName?.substring(
+                                0,
+                                min(2, profile.displayName!.length),
+                              ) ??
+                              "",
                         ),
                       ),
-              title: Text(profile.displayName),
+              title: Text(profile.displayName ?? profile.handle),
               subtitle: Text("@${profile.handle}"),
             );
           },

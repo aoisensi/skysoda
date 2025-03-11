@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$BlueskyActor {
   String get did => throw _privateConstructorUsedError;
-  String get displayName => throw _privateConstructorUsedError;
+  String? get displayName => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
   String get handle => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $BlueskyActorCopyWith<$Res> {
     $Res Function(BlueskyActor) then,
   ) = _$BlueskyActorCopyWithImpl<$Res, BlueskyActor>;
   @useResult
-  $Res call({String did, String displayName, String? avatar, String handle});
+  $Res call({String did, String? displayName, String? avatar, String handle});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$BlueskyActorCopyWithImpl<$Res, $Val extends BlueskyActor>
   @override
   $Res call({
     Object? did = null,
-    Object? displayName = null,
+    Object? displayName = freezed,
     Object? avatar = freezed,
     Object? handle = null,
   }) {
@@ -67,10 +67,10 @@ class _$BlueskyActorCopyWithImpl<$Res, $Val extends BlueskyActor>
                     : did // ignore: cast_nullable_to_non_nullable
                         as String,
             displayName:
-                null == displayName
+                freezed == displayName
                     ? _value.displayName
                     : displayName // ignore: cast_nullable_to_non_nullable
-                        as String,
+                        as String?,
             avatar:
                 freezed == avatar
                     ? _value.avatar
@@ -96,7 +96,7 @@ abstract class _$$BlueskyActorImplCopyWith<$Res>
   ) = __$$BlueskyActorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String did, String displayName, String? avatar, String handle});
+  $Res call({String did, String? displayName, String? avatar, String handle});
 }
 
 /// @nodoc
@@ -114,7 +114,7 @@ class __$$BlueskyActorImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? did = null,
-    Object? displayName = null,
+    Object? displayName = freezed,
     Object? avatar = freezed,
     Object? handle = null,
   }) {
@@ -126,10 +126,10 @@ class __$$BlueskyActorImplCopyWithImpl<$Res>
                 : did // ignore: cast_nullable_to_non_nullable
                     as String,
         displayName:
-            null == displayName
+            freezed == displayName
                 ? _value.displayName
                 : displayName // ignore: cast_nullable_to_non_nullable
-                    as String,
+                    as String?,
         avatar:
             freezed == avatar
                 ? _value.avatar
@@ -158,7 +158,7 @@ class _$BlueskyActorImpl implements _BlueskyActor {
   @override
   final String did;
   @override
-  final String displayName;
+  final String? displayName;
   @override
   final String? avatar;
   @override
@@ -197,7 +197,7 @@ class _$BlueskyActorImpl implements _BlueskyActor {
 abstract class _BlueskyActor implements BlueskyActor {
   const factory _BlueskyActor({
     required final String did,
-    required final String displayName,
+    required final String? displayName,
     required final String? avatar,
     required final String handle,
   }) = _$BlueskyActorImpl;
@@ -205,7 +205,7 @@ abstract class _BlueskyActor implements BlueskyActor {
   @override
   String get did;
   @override
-  String get displayName;
+  String? get displayName;
   @override
   String? get avatar;
   @override
