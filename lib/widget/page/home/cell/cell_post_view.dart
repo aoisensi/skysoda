@@ -5,23 +5,22 @@ import 'package:skysoda/pod/bluesky/blueksy_post_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_profile_pod.dart';
 
 class CellPostView extends ConsumerWidget {
-  const CellPostView(this.did, this.uri, {super.key});
+  const CellPostView(this.uri, {super.key});
 
-  final String did;
   final $atp.AtUri uri;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ref
-          .watch(podBlueskyPost((did, uri)))
+          .watch(podBlueskyPost(uri))
           .when(
             data: (post) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ref
-                      .watch(podBlueskyProfile((did, post.authorDid)))
+                      .watch(podBlueskyProfile(post.authorDid))
                       .when(
                         data:
                             (profile) => ListTile(

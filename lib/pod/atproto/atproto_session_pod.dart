@@ -5,6 +5,8 @@ import 'package:skysoda/pod/preference_pod.dart';
 
 typedef AtprotoCredentials = (String, String, String);
 
+final podAtprotoDid = Provider<String>((ref) => throw UnimplementedError());
+
 final podAtprotoSession = FutureProvider.family
     .autoDispose<Session, (String, String, String)>((ref, args) async {
       return (await $atp.createSession(
@@ -27,14 +29,12 @@ final podAtprotoDids = FutureProvider.autoDispose<List<String>>((ref) async {
   )).map((s) => s.did).toList();
 });
 
-final podAtproto = FutureProvider.family.autoDispose<Session, String>((
-  ref,
-  arg,
-) async {
+final podAtproto = FutureProvider.autoDispose<Session>((ref) async {
+  final did = ref.watch(podAtprotoDid);
   return (await ref.watch(
     podAtprotoSessions.future,
-  )).firstWhere((s) => s.did == arg);
-});
+  )).firstWhere((s) => s.did == did);
+}, dependencies: [podAtprotoDid]);
 
 final podAtprotoCredentials = Provider<List<AtprotoCredentials>>((ref) {
   return ref.watch(podPreferencesCredentials).map((c) {

@@ -14,7 +14,12 @@ class HomePage extends ConsumerWidget {
           .watch(podAtprotoSessions)
           .when(
             data: (sessions) {
-              return ColumnTimelineView(sessions.first.did);
+              return ProviderScope(
+                overrides: [
+                  podAtprotoDid.overrideWithValue(sessions.first.did),
+                ],
+                child: const ColumnTimelineView(),
+              );
             },
             error: (error, st) => Center(child: Text(error.toString())),
             loading: () => Center(child: CircularProgressIndicator()),

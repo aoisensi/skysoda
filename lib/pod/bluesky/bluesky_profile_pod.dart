@@ -5,15 +5,15 @@ import 'package:skysoda/entity/bluesky/bluesky_profile.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyProfile = AsyncNotifierProvider.autoDispose
-    .family<BlueskyProfileNotifier, BlueskyProfile, (String, String)>(
+    .family<BlueskyProfileNotifier, BlueskyProfile, String>(
       BlueskyProfileNotifier.new,
     );
 
 class BlueskyProfileNotifier
-    extends AutoDisposeFamilyAsyncNotifier<BlueskyProfile, (String, String)> {
+    extends AutoDisposeFamilyAsyncNotifier<BlueskyProfile, String> {
   @override
   FutureOr<BlueskyProfile> build(arg) async {
-    final value = ref.watch(podBlueskyProfileCache(arg.$2));
+    final value = ref.watch(podBlueskyProfileCache(arg));
     if (value != null) {
       switch (value) {
         case AsyncLoading():
@@ -24,9 +24,9 @@ class BlueskyProfileNotifier
           return value;
       }
     }
-    final bluesky = await ref.watch(podBluesky(arg.$1).future);
-    final data = await bluesky.actor.getProfile(actor: arg.$2);
-    final cache = ref.watch(podBlueskyProfileCache(arg.$2).notifier);
+    final bluesky = await ref.watch(podBluesky.future);
+    final data = await bluesky.actor.getProfile(actor: arg);
+    final cache = ref.watch(podBlueskyProfileCache(arg).notifier);
     final profile = BlueskyProfile.fromActorProfile(data.data);
     cache.state = AsyncData(profile);
     return profile;

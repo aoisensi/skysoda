@@ -4,21 +4,19 @@ import 'package:skysoda/pod/bluesky/bluesky_timeline_pod.dart';
 import 'package:skysoda/widget/page/home/cell/cell_post_view.dart';
 
 class ColumnTimelineView extends ConsumerWidget {
-  const ColumnTimelineView(this.did, {super.key});
-
-  final String did;
+  const ColumnTimelineView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref
-        .watch(podBlueskyTimeline((did,)))
+        .watch(podBlueskyTimeline)
         .when(
           data: (timeline) {
             return ListView.builder(
               itemCount: timeline.length,
               itemBuilder: (context, index) {
                 final uri = timeline[index];
-                return CellPostView(did, uri);
+                return CellPostView(uri);
               },
             );
           },

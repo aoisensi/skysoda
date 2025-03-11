@@ -7,15 +7,15 @@ import 'package:skysoda/entity/bluesky/bluesky_post.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyPost = AsyncNotifierProvider.autoDispose
-    .family<BlueskyPostNotifier, BlueskyPost, (String, $atp.AtUri)>(
+    .family<BlueskyPostNotifier, BlueskyPost, $atp.AtUri>(
       BlueskyPostNotifier.new,
     );
 
 class BlueskyPostNotifier
-    extends AutoDisposeFamilyAsyncNotifier<BlueskyPost, (String, $atp.AtUri)> {
+    extends AutoDisposeFamilyAsyncNotifier<BlueskyPost, $atp.AtUri> {
   @override
-  FutureOr<BlueskyPost> build((String, AtUri) arg) async {
-    final value = ref.watch(podBlueskyPostCache(arg.$2));
+  FutureOr<BlueskyPost> build(AtUri arg) async {
+    final value = ref.watch(podBlueskyPostCache(arg));
     if (value != null) {
       switch (value) {
         case AsyncLoading():
@@ -26,9 +26,9 @@ class BlueskyPostNotifier
           return value;
       }
     }
-    final bluesky = await ref.watch(podBluesky(arg.$1).future);
-    final data = await bluesky.feed.getPosts(uris: [arg.$2]);
-    final cache = ref.watch(podBlueskyPostCache(arg.$2).notifier);
+    final bluesky = await ref.watch(podBluesky.future);
+    final data = await bluesky.feed.getPosts(uris: [arg]);
+    final cache = ref.watch(podBlueskyPostCache(arg).notifier);
     final post = BlueskyPost.fromPost(data.data.posts.first);
     cache.state = AsyncData(post);
     return post;
