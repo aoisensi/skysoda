@@ -7,7 +7,7 @@ import 'package:bluesky/ids.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/atproto/atproto_subscribe_pod.dart';
-import 'package:skysoda/pod/bluesky/blueksy_post_pod.dart';
+import 'package:skysoda/pod/bluesky/bluesky_post_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyTimelinePublic =
