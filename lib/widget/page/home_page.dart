@@ -4,7 +4,7 @@ import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/widget/page/home/column/column_timeline_view.dart';
 
 final _podColumns = Provider<List<Widget>>((ref) {
-  return [const ColumnTimelineView()];
+  return [const ColumnTimelineHomeView()];
 });
 
 class HomePage extends ConsumerWidget {
