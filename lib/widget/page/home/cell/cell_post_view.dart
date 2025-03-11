@@ -18,6 +18,7 @@ class CellPostView extends ConsumerWidget {
           .when(
             data: (post) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ref
                       .watch(podBlueskyProfile((did, post.authorDid)))
@@ -37,11 +38,14 @@ class CellPostView extends ConsumerWidget {
                             () =>
                                 ListTile(leading: CircularProgressIndicator()),
                       ),
-                  Text(post.text),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                    child: Text(post.text),
+                  ),
                 ],
               );
             },
-            error: (error, st) => Center(child: Text(error.toString())),
+            error: (error, st) => Text(error.toString()),
             loading: () => Center(child: CircularProgressIndicator()),
           ),
     );
