@@ -10,15 +10,17 @@ import 'package:skysoda/pod/bluesky/bluesky_profile_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyTimeline =
-    AsyncNotifierProvider.autoDispose<BlueskyTimelinePod, List<$atp.AtUri>>(
+    AsyncNotifierProvider<BlueskyTimelinePod, List<$atp.AtUri>>(
       BlueskyTimelinePod.new,
       dependencies: [podAtprotoDid, podAtproto, podBluesky],
     );
 
-class BlueskyTimelinePod extends AutoDisposeAsyncNotifier<List<$atp.AtUri>> {
+class BlueskyTimelinePod extends AsyncNotifier<List<$atp.AtUri>> {
   @override
-  FutureOr<List<$atp.AtUri>> build() {
-    return _fetch();
+  FutureOr<List<$atp.AtUri>> build() async {
+    final timeline = await _fetch();
+    ref.keepAlive();
+    return timeline;
   }
 
   Future<List<$atp.AtUri>> _fetch() async {
