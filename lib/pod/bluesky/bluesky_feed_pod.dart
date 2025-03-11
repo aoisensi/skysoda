@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:atproto/core.dart' as $atp;
+import 'package:bluesky/bluesky.dart' as $bsky;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/entity/bluesky/bluesky_post.dart';
 import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
@@ -10,12 +11,27 @@ import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final podBlueskyTimeline =
-    AsyncNotifierProvider<BlueskyTimelinePod, List<$atp.AtUri>>(
-      BlueskyTimelinePod.new,
+    AsyncNotifierProvider<BlueskyTimelineNotifier, List<$atp.AtUri>>(
+      BlueskyTimelineNotifier.new,
       dependencies: [podAtprotoDid, podAtproto, podBluesky],
     );
 
-class BlueskyTimelinePod extends AsyncNotifier<List<$atp.AtUri>> {
+class BlueskyTimelineNotifier extends _BlueskyFeedNotifier {
+  @override
+  Future<$atp.XRPCResponse<$bsky.Feed>> get(
+    $bsky.Bluesky bluesky,
+    String? cursor,
+  ) {
+    return bluesky.feed.getTimeline(cursor: cursor);
+  }
+}
+
+abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
+  Future<$atp.XRPCResponse<$bsky.Feed>> get(
+    $bsky.Bluesky bluesky,
+    String? cursor,
+  );
+
   @override
   FutureOr<List<$atp.AtUri>> build() async {
     final timeline = await _fetch();

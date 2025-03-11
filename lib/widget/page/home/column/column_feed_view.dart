@@ -1,39 +1,30 @@
 import 'package:atproto/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_subscribe_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_feed_pod.dart';
 import 'package:skysoda/widget/page/home/cell/cell_post_view.dart';
 
-class ColumnTimelineHomeView extends _ColumnTimelineView {
-  const ColumnTimelineHomeView({super.key});
+class ColumnFeedTimelineView extends _ColumnFeedView {
+  const ColumnFeedTimelineView({super.key});
 
   @override
   AsyncValue<List<AtUri>> watchPod(WidgetRef ref) =>
       ref.watch(podBlueskyTimeline);
 }
 
-class ColumnTimelinePublicView extends _ColumnTimelineView {
-  const ColumnTimelinePublicView({super.key});
-
-  @override
-  AsyncValue<List<AtUri>> watchPod(WidgetRef ref) =>
-      ref.watch(podBlueskyTimelinePublic);
-}
-
-abstract class _ColumnTimelineView extends ConsumerWidget {
-  const _ColumnTimelineView({super.key});
+abstract class _ColumnFeedView extends ConsumerWidget {
+  const _ColumnFeedView({super.key});
 
   AsyncValue<List<AtUri>> watchPod(WidgetRef ref);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return watchPod(ref).when(
-      data: (timeline) {
+      data: (feed) {
         return ListView.builder(
-          itemCount: timeline.length,
+          itemCount: feed.length,
           itemBuilder: (context, index) {
-            final uri = timeline[index];
+            final uri = feed[index];
             return CellPostView(uri);
           },
         );
