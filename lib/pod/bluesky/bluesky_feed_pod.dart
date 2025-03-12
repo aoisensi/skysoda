@@ -16,6 +16,12 @@ final blueskyTimelinePod =
       dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
     );
 
+final blueskyTimelineKeepAlivePod = Provider((ref) {
+  for (final uri in ref.watch(blueskyTimelinePod).valueOrNull ?? []) {
+    ref.watch(blueskyPostPod(uri));
+  }
+}, dependencies: [blueskyTimelinePod, blueskyPostPod]);
+
 class BlueskyTimelineNotifier extends _BlueskyFeedNotifier {
   @override
   Future<$atp.XRPCResponse<$bsky.Feed>> get(
@@ -51,17 +57,12 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
     final data = await bluesky.feed.getTimeline(cursor: _cursor, limit: 100);
     _cursor = data.data.cursor;
     for (final fv in data.data.feed) {
-      final post = BlueskyPost.fromPost(fv.post);
-      final author = BlueskyActor.fromActorBasic(fv.post.author);
-      ref
-          .read(blueskyPostCachePod(fv.post.uri).notifier)
-          .state = AsyncValue.data(post);
-      ref
-          .read(blueskyActorCachePod(fv.post.author.did).notifier)
-          .state = AsyncValue.data(author);
+      final post = AsyncData(BlueskyPost.fromPost(fv.post));
+      final author = AsyncData(BlueskyActor.fromActorBasic(fv.post.author));
+      ref.read(blueskyPostCachePod(fv.post.uri).notifier).state = post;
+      ref.read(blueskyActorCachePod(fv.post.author.did).notifier).state =
+          author;
     }
-    return data.data.feed.map((fv) {
-      return fv.post.uri;
-    }).toList();
+    return data.data.feed.map((fv) => fv.post.uri).toList();
   }
 }

@@ -5,14 +5,13 @@ import 'package:bluesky/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skysoda/entity/bluesky/bluesky_post.dart';
 import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
-import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
 final blueskyPostPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyPostNotifier, BlueskyPost, $atp.AtUri>(
       BlueskyPostNotifier.new,
-      dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
+      dependencies: [blueskyPod, blueskyActorPod],
     );
 
 class BlueskyPostNotifier
@@ -27,6 +26,7 @@ class BlueskyPostNotifier
         case AsyncError error:
           throw error;
         case AsyncData(:final value):
+          ref.watch(blueskyActorPod(value.authorDid));
           return value;
       }
     }
@@ -34,11 +34,12 @@ class BlueskyPostNotifier
     final data = await bluesky.feed.getPosts(uris: [arg]);
     final cache = ref.watch(blueskyPostCachePod(arg).notifier);
     final post = BlueskyPost.fromPost(data.data.posts.first);
+    ref.watch(blueskyActorPod(post.authorDid));
     cache.state = AsyncData(post);
     return post;
   }
 
-  static Future<void> fetchAll(Ref ref, List<$atp.AtUri> uris) async {
+  static Future<void> fetchMultiple(Ref ref, List<$atp.AtUri> uris) async {
     final bluesky = await ref.watch(blueskyPod.future);
     for (final uri in uris) {
       ref.watch(blueskyPostCachePod(uri).notifier).state = AsyncLoading();

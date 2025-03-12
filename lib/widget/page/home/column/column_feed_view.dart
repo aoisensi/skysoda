@@ -9,7 +9,11 @@ class ColumnTimelineView extends _ColumnFeedView {
   const ColumnTimelineView({super.key});
 
   @override
-  AsyncValue<List<AtUri>> watch(WidgetRef ref) => ref.watch(blueskyTimelinePod);
+  AsyncValue<List<AtUri>> watch(WidgetRef ref) {
+    ref.watch(blueskyTimelineKeepAlivePod);
+    return ref.watch(blueskyTimelinePod);
+  }
+
   @override
   Future<bool> more(WidgetRef ref) =>
       ref.read(blueskyTimelinePod.notifier).more();
