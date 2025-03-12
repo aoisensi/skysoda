@@ -26,14 +26,14 @@ class CellPostView extends ConsumerWidget {
                     child: Text(post.text),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: PostActionsView(uri),
                   ),
                 ],
               );
             },
             error: (error, st) => Text(error.toString()),
-            loading: () => Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
           ),
     );
   }

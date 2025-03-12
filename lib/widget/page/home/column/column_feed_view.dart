@@ -35,7 +35,7 @@ abstract class _ColumnFeedView extends HookConsumerWidget {
           itemBuilder: (context, index) {
             if (index == feed.length) {
               if (isFinished.value) {
-                return Center(
+                return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text('・'),
@@ -45,7 +45,7 @@ abstract class _ColumnFeedView extends HookConsumerWidget {
               more(ref).then((value) {
                 if (!value) isFinished.value = true;
               });
-              return Center(
+              return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CircularProgressIndicator(),
@@ -57,7 +57,7 @@ abstract class _ColumnFeedView extends HookConsumerWidget {
         );
       },
       error: (error, st) => Center(child: Text(error.toString())),
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

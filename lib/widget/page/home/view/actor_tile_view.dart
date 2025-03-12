@@ -35,7 +35,7 @@ class ActorTileView extends ConsumerWidget {
             );
           },
           error: (error, st) => ListTile(title: Text(error.toString())),
-          loading: () => ListTile(leading: CircularProgressIndicator()),
+          loading: () => const ListTile(leading: CircularProgressIndicator()),
         );
   }
 }

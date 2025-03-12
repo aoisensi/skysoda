@@ -42,7 +42,7 @@ class BlueskyPostNotifier
   static Future<void> fetchMultiple(Ref ref, List<$atp.AtUri> uris) async {
     final bluesky = await ref.watch(blueskyPod.future);
     for (final uri in uris) {
-      ref.watch(blueskyPostCachePod(uri).notifier).state = AsyncLoading();
+      ref.watch(blueskyPostCachePod(uri).notifier).state = const AsyncLoading();
     }
     try {
       final data = await bluesky.feed.getPosts(uris: uris);

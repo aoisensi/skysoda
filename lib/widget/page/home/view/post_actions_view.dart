@@ -12,10 +12,10 @@ class PostActionsView extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(icon: Icon(Icons.replay), onPressed: () {}),
-        IconButton(icon: Icon(Icons.refresh), onPressed: () {}),
-        IconButton(icon: Icon(Icons.star), onPressed: () {}),
-        IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.replay), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.refresh), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.star), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
       ],
     );
   }

@@ -22,7 +22,7 @@ class HomePage extends ConsumerWidget {
                 : const _LargeHomePage();
           },
           error: (error, st) => Center(child: Text(error.toString())),
-          loading: () => Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: CircularProgressIndicator()),
         );
   }
 }
@@ -55,7 +55,7 @@ class _LargeHomePage extends ConsumerWidget {
               );
             },
             error: (error, st) => Center(child: Text(error.toString())),
-            loading: () => Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
           ),
     );
   }
@@ -85,7 +85,7 @@ class _SmallHomePage extends ConsumerWidget {
               );
             },
             error: (error, st) => Center(child: Text(error.toString())),
-            loading: () => Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
           ),
     );
   }

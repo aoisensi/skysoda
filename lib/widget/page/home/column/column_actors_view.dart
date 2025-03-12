@@ -30,7 +30,7 @@ abstract class _ColumnActorsView extends ConsumerWidget {
         );
       },
       error: (error, st) => Center(child: Text(error.toString())),
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

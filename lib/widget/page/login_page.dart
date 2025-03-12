@@ -12,29 +12,29 @@ class LoginPage extends HookConsumerWidget {
     final handle = useState('');
     final password = useState('');
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'handle',
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) => handle.value = value,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'app password',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
               onChanged: (value) => password.value = value,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
                 await ref.read(
@@ -44,7 +44,7 @@ class LoginPage extends HookConsumerWidget {
                     .read(preferencesCredentialsPod.notifier)
                     .add('${handle.value}\$${password.value}');
               },
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
           ],
         ),

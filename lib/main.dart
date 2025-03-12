@@ -6,13 +6,13 @@ import 'pod/preference_pod.dart';
 
 void main() async {
   final sp = await SharedPreferencesWithCache.create(
-    cacheOptions: SharedPreferencesWithCacheOptions(),
+    cacheOptions: const SharedPreferencesWithCacheOptions(),
   );
 
   runApp(
     ProviderScope(
       overrides: [sharedPreferencesPod.overrideWithValue(sp)],
-      child: App(),
+      child: const App(),
     ),
   );
 }
