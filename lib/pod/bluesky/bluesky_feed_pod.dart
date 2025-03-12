@@ -10,10 +10,10 @@ import 'package:skysoda/pod/bluesky/bluesky_post_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
-final podBlueskyTimeline =
+final blueskyTimelinePod =
     AsyncNotifierProvider<BlueskyTimelineNotifier, List<$atp.AtUri>>(
       BlueskyTimelineNotifier.new,
-      dependencies: [podAtprotoDid, podAtproto, podBluesky],
+      dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
     );
 
 class BlueskyTimelineNotifier extends _BlueskyFeedNotifier {
@@ -47,17 +47,17 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
   }
 
   Future<List<$atp.AtUri>> _fetch() async {
-    final bluesky = await ref.watch(podBluesky.future);
+    final bluesky = await ref.watch(blueskyPod.future);
     final data = await bluesky.feed.getTimeline(cursor: _cursor, limit: 100);
     _cursor = data.data.cursor;
     for (final fv in data.data.feed) {
       final post = BlueskyPost.fromPost(fv.post);
       final author = BlueskyActor.fromActorBasic(fv.post.author);
       ref
-          .read(podBlueskyPostCache(fv.post.uri).notifier)
+          .read(blueskyPostCachePod(fv.post.uri).notifier)
           .state = AsyncValue.data(post);
       ref
-          .read(podBlueskyActorCache(fv.post.author.did).notifier)
+          .read(blueskyActorCachePod(fv.post.author.did).notifier)
           .state = AsyncValue.data(author);
     }
     return data.data.feed.map((fv) {

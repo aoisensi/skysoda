@@ -9,17 +9,17 @@ import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
-final podBlueskyPost = AsyncNotifierProvider.autoDispose
+final blueskyPostPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyPostNotifier, BlueskyPost, $atp.AtUri>(
       BlueskyPostNotifier.new,
-      dependencies: [podAtprotoDid, podAtproto, podBluesky],
+      dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
     );
 
 class BlueskyPostNotifier
     extends AutoDisposeFamilyAsyncNotifier<BlueskyPost, $atp.AtUri> {
   @override
   FutureOr<BlueskyPost> build(AtUri arg) async {
-    final value = ref.watch(podBlueskyPostCache(arg));
+    final value = ref.watch(blueskyPostCachePod(arg));
     if (value != null) {
       switch (value) {
         case AsyncLoading():
@@ -30,34 +30,34 @@ class BlueskyPostNotifier
           return value;
       }
     }
-    final bluesky = await ref.watch(podBluesky.future);
+    final bluesky = await ref.watch(blueskyPod.future);
     final data = await bluesky.feed.getPosts(uris: [arg]);
-    final cache = ref.watch(podBlueskyPostCache(arg).notifier);
+    final cache = ref.watch(blueskyPostCachePod(arg).notifier);
     final post = BlueskyPost.fromPost(data.data.posts.first);
     cache.state = AsyncData(post);
     return post;
   }
 
   static Future<void> fetchAll(Ref ref, List<$atp.AtUri> uris) async {
-    final bluesky = await ref.watch(podBluesky.future);
+    final bluesky = await ref.watch(blueskyPod.future);
     for (final uri in uris) {
-      ref.watch(podBlueskyPostCache(uri).notifier).state = AsyncLoading();
+      ref.watch(blueskyPostCachePod(uri).notifier).state = AsyncLoading();
     }
     try {
       final data = await bluesky.feed.getPosts(uris: uris);
       for (final data in data.data.posts) {
         final post = BlueskyPost.fromPost(data);
         final profile = BlueskyActor.fromActorBasic(data.author);
-        ref.watch(podBlueskyPostCache(data.uri).notifier).state = AsyncData(
+        ref.watch(blueskyPostCachePod(data.uri).notifier).state = AsyncData(
           post,
         );
         ref
-            .watch(podBlueskyActorCache(data.author.did).notifier)
+            .watch(blueskyActorCachePod(data.author.did).notifier)
             .state = AsyncData(profile);
       }
     } catch (error, stackTrace) {
       for (final uri in uris) {
-        ref.watch(podBlueskyPostCache(uri).notifier).state = AsyncError(
+        ref.watch(blueskyPostCachePod(uri).notifier).state = AsyncError(
           error,
           stackTrace,
         );
@@ -66,5 +66,5 @@ class BlueskyPostNotifier
   }
 }
 
-final podBlueskyPostCache =
+final blueskyPostCachePod =
     StateProvider.family<AsyncValue<BlueskyPost>?, AtUri>((ref, _) => null);

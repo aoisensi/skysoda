@@ -9,7 +9,7 @@ class ColumnFollowsView extends _ColumnActorsView {
 
   @override
   AsyncValue<List<String>> watchPod(WidgetRef ref) {
-    return ref.watch(podBlueskyFollows(ref.watch(podAtprotoDid)));
+    return ref.watch(blueskyFollowsPod(ref.watch(atprotoDidPod)));
   }
 }
 

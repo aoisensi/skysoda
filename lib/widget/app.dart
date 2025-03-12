@@ -13,7 +13,7 @@ class App extends ConsumerWidget {
       title: 'Riverpod Counter',
       theme: ThemeData(primarySwatch: Colors.blue),
       home:
-          ref.watch(podPreferencesCredentials).isNotEmpty
+          ref.watch(preferencesCredentialsPod).isNotEmpty
               ? const HomePage()
               : const LoginPage(),
     );

@@ -11,7 +11,7 @@ void main() async {
 
   runApp(
     ProviderScope(
-      overrides: [podSharedPreferences.overrideWithValue(sp)],
+      overrides: [sharedPreferencesPod.overrideWithValue(sp)],
       child: App(),
     ),
   );

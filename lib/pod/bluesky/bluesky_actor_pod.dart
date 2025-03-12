@@ -5,17 +5,17 @@ import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
 import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
-final podBlueskyActor = AsyncNotifierProvider.autoDispose
+final blueskyActorPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyActorNotifier, BlueskyActor, String>(
       BlueskyActorNotifier.new,
-      dependencies: [podAtprotoDid, podAtproto, podBluesky],
+      dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
     );
 
 class BlueskyActorNotifier
     extends AutoDisposeFamilyAsyncNotifier<BlueskyActor, String> {
   @override
   FutureOr<BlueskyActor> build(arg) async {
-    final value = ref.watch(podBlueskyActorCache(arg));
+    final value = ref.watch(blueskyActorCachePod(arg));
     if (value != null) {
       switch (value) {
         case AsyncLoading():
@@ -26,14 +26,14 @@ class BlueskyActorNotifier
           return value;
       }
     }
-    final bluesky = await ref.watch(podBluesky.future);
+    final bluesky = await ref.watch(blueskyPod.future);
     final data = await bluesky.actor.getProfile(actor: arg);
-    final cache = ref.watch(podBlueskyActorCache(arg).notifier);
+    final cache = ref.watch(blueskyActorCachePod(arg).notifier);
     final profile = BlueskyActor.fromActorProfile(data.data);
     cache.state = AsyncData(profile);
     return profile;
   }
 }
 
-final podBlueskyActorCache =
+final blueskyActorCachePod =
     StateProviderFamily<AsyncValue<BlueskyActor>?, String>((ref, _) => null);

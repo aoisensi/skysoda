@@ -14,7 +14,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref
-        .watch(podAtprotoDids)
+        .watch(atprotoDidsPod)
         .when(
           data: (dids) {
             return MediaQuery.sizeOf(context).width < 600
@@ -35,7 +35,7 @@ class _LargeHomePage extends ConsumerWidget {
     final columns = ref.watch(_podColumns);
     return Scaffold(
       body: ref
-          .watch(podAtprotoSessions)
+          .watch(atprotoSessionsPod)
           .when(
             data: (sessions) {
               return ListView(
@@ -46,7 +46,7 @@ class _LargeHomePage extends ConsumerWidget {
                         width: 360.0,
                         child: ProviderScope(
                           overrides: [
-                            podAtprotoDid.overrideWithValue(sessions.first.did),
+                            atprotoDidPod.overrideWithValue(sessions.first.did),
                           ],
                           child: builder,
                         ),
@@ -69,7 +69,7 @@ class _SmallHomePage extends ConsumerWidget {
     final columns = ref.watch(_podColumns);
     return Scaffold(
       body: ref
-          .watch(podAtprotoSessions)
+          .watch(atprotoSessionsPod)
           .when(
             data: (sessions) {
               return PageView(
@@ -77,7 +77,7 @@ class _SmallHomePage extends ConsumerWidget {
                     columns.map((builder) {
                       return ProviderScope(
                         overrides: [
-                          podAtprotoDid.overrideWithValue(sessions.first.did),
+                          atprotoDidPod.overrideWithValue(sessions.first.did),
                         ],
                         child: builder,
                       );

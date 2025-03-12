@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:atproto/atproto.dart' as $atp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final podAtprotoSubscribe = FutureProvider<SubscribeStreams>((ref) async {
+final atprotoSubscribePod = FutureProvider<SubscribeStreams>((ref) async {
   final streams = SubscribeStreams();
   final atproto = $atp.ATProto.anonymous();
   final subscribe = await atproto.sync.subscribeRepos();

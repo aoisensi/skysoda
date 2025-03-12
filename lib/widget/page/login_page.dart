@@ -38,10 +38,10 @@ class LoginPage extends HookConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 await ref.read(
-                  podAtprotoSession((handle.value, password.value, "")).future,
+                  atprotoSessionPod((handle.value, password.value, "")).future,
                 );
                 ref
-                    .read(podPreferencesCredentials.notifier)
+                    .read(preferencesCredentialsPod.notifier)
                     .add("${handle.value}\$${password.value}");
               },
               child: Text('Login'),

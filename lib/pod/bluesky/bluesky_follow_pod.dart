@@ -5,10 +5,10 @@ import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
 import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
 import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
 
-final podBlueskyFollows = AsyncNotifierProvider.autoDispose
+final blueskyFollowsPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyFollowsNotifier, List<String>, String>(
       BlueskyFollowsNotifier.new,
-      dependencies: [podBluesky],
+      dependencies: [blueskyPod],
     );
 
 class BlueskyFollowsNotifier
@@ -29,7 +29,7 @@ class BlueskyFollowsNotifier
   }
 
   Future<List<String>> _fetch() async {
-    final bluesky = await ref.watch(podBluesky.future);
+    final bluesky = await ref.watch(blueskyPod.future);
     final data = await bluesky.graph.getFollows(
       actor: arg,
       cursor: _cursor,
@@ -38,7 +38,7 @@ class BlueskyFollowsNotifier
     _cursor = data.data.cursor;
     final follows = data.data.follows;
     for (final actor in follows.map(BlueskyActor.fromActor)) {
-      ref.watch(podBlueskyActorCache(actor.did).notifier).state = AsyncData(
+      ref.watch(blueskyActorCachePod(actor.did).notifier).state = AsyncData(
         actor,
       );
     }

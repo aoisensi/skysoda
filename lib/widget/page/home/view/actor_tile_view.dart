@@ -12,7 +12,7 @@ class ActorTileView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref
-        .watch(podBlueskyActor(did))
+        .watch(blueskyActorPod(did))
         .when(
           data: (profile) {
             return ListTile(

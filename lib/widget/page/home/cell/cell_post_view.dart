@@ -14,7 +14,7 @@ class CellPostView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ref
-          .watch(podBlueskyPost(uri))
+          .watch(blueskyPostPod(uri))
           .when(
             data: (post) {
               return Column(

@@ -9,10 +9,10 @@ class ColumnTimelineView extends _ColumnFeedView {
   const ColumnTimelineView({super.key});
 
   @override
-  AsyncValue<List<AtUri>> watch(WidgetRef ref) => ref.watch(podBlueskyTimeline);
+  AsyncValue<List<AtUri>> watch(WidgetRef ref) => ref.watch(blueskyTimelinePod);
   @override
   Future<bool> more(WidgetRef ref) =>
-      ref.read(podBlueskyTimeline.notifier).more();
+      ref.read(blueskyTimelinePod.notifier).more();
 }
 
 abstract class _ColumnFeedView extends HookConsumerWidget {

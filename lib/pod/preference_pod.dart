@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final podPreferencesCredentials = NotifierProvider(
+final preferencesCredentialsPod = NotifierProvider(
   () => SharedPreferencesListNotifier("credentials", []),
 );
 
@@ -15,7 +15,7 @@ class SharedPreferencesNotifier<T> extends Notifier<T> {
 
   @override
   T build() {
-    _sp = ref.read(podSharedPreferences);
+    _sp = ref.read(sharedPreferencesPod);
     switch (T) {
       case const (int):
         return _sp.getInt(_key) as T? ?? _initial;
@@ -60,6 +60,6 @@ class SharedPreferencesListNotifier
   }
 }
 
-final podSharedPreferences = Provider<SharedPreferencesWithCache>(
+final sharedPreferencesPod = Provider<SharedPreferencesWithCache>(
   (ref) => throw UnimplementedError(),
 );
