@@ -11,7 +11,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'Riverpod Counter',
+      title: 'SkySoda',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
