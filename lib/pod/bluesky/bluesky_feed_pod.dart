@@ -32,16 +32,24 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
     String? cursor,
   );
 
+  String? _cursor;
+
   @override
   FutureOr<List<$atp.AtUri>> build() async {
-    final timeline = await _fetch();
-    ref.keepAlive();
-    return timeline;
+    return await _fetch();
+  }
+
+  Future<bool> more() async {
+    if (_cursor == null) return false;
+    final feed = await _fetch();
+    state = AsyncData([...state.value!, ...feed]);
+    return true;
   }
 
   Future<List<$atp.AtUri>> _fetch() async {
     final bluesky = await ref.watch(podBluesky.future);
-    final data = await bluesky.feed.getTimeline();
+    final data = await bluesky.feed.getTimeline(cursor: _cursor, limit: 100);
+    _cursor = data.data.cursor;
     for (final fv in data.data.feed) {
       final post = BlueskyPost.fromPost(fv.post);
       final author = BlueskyActor.fromActorBasic(fv.post.author);
@@ -52,6 +60,8 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
           .read(podBlueskyActorCache(fv.post.author.did).notifier)
           .state = AsyncValue.data(author);
     }
-    return data.data.feed.map((e) => e.post.uri).toList();
+    return data.data.feed.map((fv) {
+      return fv.post.uri;
+    }).toList();
   }
 }

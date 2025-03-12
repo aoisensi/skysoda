@@ -5,7 +5,7 @@ import 'package:skysoda/widget/page/home/column/column_actors_view.dart';
 import 'package:skysoda/widget/page/home/column/column_feed_view.dart';
 
 final _podColumns = Provider<List<Widget>>((ref) {
-  return [const ColumnFeedTimelineView(), const ColumnFollowsView()];
+  return [const ColumnTimelineView(), const ColumnFollowsView()];
 });
 
 class HomePage extends ConsumerWidget {

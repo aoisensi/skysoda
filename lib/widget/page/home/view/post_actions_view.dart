@@ -10,6 +10,7 @@ class PostActionsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: Icon(Icons.replay), onPressed: () {}),
         IconButton(icon: Icon(Icons.refresh), onPressed: () {}),
