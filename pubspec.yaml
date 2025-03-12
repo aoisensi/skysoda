@@ -36,6 +36,7 @@ dependencies:
   flutter_hooks: ^0.21.2
   flutter_riverpod: ^2.6.1
   freezed_annotation: ^2.4.4
+  google_fonts: ^6.2.1
   hooks_riverpod: ^2.6.1
   shared_preferences: ^2.5.2
 
