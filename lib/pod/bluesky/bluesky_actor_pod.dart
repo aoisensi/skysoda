@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/entity/bluesky/bluesky_actor.dart';
-import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_session_pod.dart';
+import '../../entity/bluesky/bluesky_actor.dart';
+import '../atproto/atproto_session_pod.dart';
+import 'bluesky_session_pod.dart';
 
 final blueskyActorPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyActorNotifier, BlueskyActor, String>(

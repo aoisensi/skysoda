@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/pod/bluesky/bluesky_actor_pod.dart';
+import '../../../../pod/bluesky/bluesky_actor_pod.dart';
 
 class ActorTileView extends ConsumerWidget {
   const ActorTileView(this.did, {super.key});
@@ -27,11 +27,11 @@ class ActorTileView extends ConsumerWidget {
                                 0,
                                 min(2, profile.displayName!.length),
                               ) ??
-                              "",
+                              '',
                         ),
                       ),
               title: Text(profile.displayName ?? profile.handle),
-              subtitle: Text("@${profile.handle}"),
+              subtitle: Text('@${profile.handle}'),
             );
           },
           error: (error, st) => ListTile(title: Text(error.toString())),

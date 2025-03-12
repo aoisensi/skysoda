@@ -1,7 +1,7 @@
 import 'package:atproto/atproto.dart' as $atp;
 import 'package:atproto/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/pod/preference_pod.dart';
+import '../preference_pod.dart';
 
 typedef AtprotoCredentials = (String, String, String);
 

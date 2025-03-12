@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/pod/preference_pod.dart';
-import 'package:skysoda/widget/page/home_page.dart';
-import 'package:skysoda/widget/page/login_page.dart';
+import '../pod/preference_pod.dart';
+import 'page/home_page.dart';
+import 'page/login_page.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});

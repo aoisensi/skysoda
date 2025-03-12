@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skysoda/pod/atproto/atproto_session_pod.dart';
-import 'package:skysoda/widget/page/home/column/column_actors_view.dart';
-import 'package:skysoda/widget/page/home/column/column_feed_view.dart';
+import '../../pod/atproto/atproto_session_pod.dart';
+import 'home/column/column_actors_view.dart';
+import 'home/column/column_feed_view.dart';
 
 final _podColumns = Provider<List<Widget>>((ref) {
   return [const ColumnTimelineView(), const ColumnFollowsView()];
