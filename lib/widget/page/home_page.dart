@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../pod/atproto/atproto_session_pod.dart';
+import '../../pod/atproto/atproto_subscribe_pod.dart';
 import 'home/column/column_actors_view.dart';
 import 'home/column/column_feed_view.dart';
 
 final _podColumns = Provider<List<Widget>>((ref) {
-  return [const ColumnTimelineView(), const ColumnFollowsView()];
+  return [
+    const ColumnTimelineView(),
+    const ColumnFollowsView(),
+    const ColumnFollowersView(),
+  ];
 });
 
 class HomePage extends ConsumerWidget {
@@ -13,6 +18,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(atprotoSubscribePod);
     return ref
         .watch(atprotoDidsPod)
         .when(

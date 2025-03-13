@@ -7,6 +7,7 @@ import '../../entity/bluesky/bluesky_post.dart';
 import '../../entity/bluesky/bluesky_actor.dart';
 import 'bluesky_actor_pod.dart';
 import 'bluesky_session_pod.dart';
+import 'bluesky_subscribe_pod.dart';
 
 final blueskyPostPod = AsyncNotifierProvider.autoDispose
     .family<BlueskyPostNotifier, BlueskyPost, $atp.AtUri>(
@@ -18,6 +19,10 @@ class BlueskyPostNotifier
     extends AutoDisposeFamilyAsyncNotifier<BlueskyPost, $atp.AtUri> {
   @override
   FutureOr<BlueskyPost> build(AtUri arg) async {
+    ref.listen(blueskySubscribePostDeletedPod, (_, uri) {
+      //  ref.invalidate(blueskyPostPod(uri!));
+      //  ref.invalidate(blueskyPostCachePod(uri));
+    });
     final value = ref.watch(blueskyPostCachePod(arg));
     if (value != null) {
       switch (value) {

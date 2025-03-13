@@ -2,6 +2,7 @@ import 'package:atproto/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../../../../pod/bluesky/bluesky_feed_pod.dart';
 import '../cell/cell_post_view.dart';
 
@@ -52,7 +53,7 @@ abstract class _ColumnFeedView extends HookConsumerWidget {
                 ),
               );
             }
-            return CellPostView(feed[index]);
+            return CellPostView(feed.elementAt(index));
           },
         );
       },

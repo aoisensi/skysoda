@@ -6,14 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../entity/bluesky/bluesky_post.dart';
 import '../../entity/bluesky/bluesky_actor.dart';
 import '../atproto/atproto_session_pod.dart';
+import 'bluesky_follow_pod.dart';
 import 'bluesky_post_pod.dart';
 import 'bluesky_actor_pod.dart';
 import 'bluesky_session_pod.dart';
+import 'bluesky_subscribe_pod.dart';
 
 final blueskyTimelinePod =
     AsyncNotifierProvider<BlueskyTimelineNotifier, List<$atp.AtUri>>(
       BlueskyTimelineNotifier.new,
-      dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
+      dependencies: [
+        atprotoDidPod,
+        atprotoPod,
+        blueskyPod,
+        blueskySelfAndAllFollowsPod,
+      ],
     );
 
 final blueskyTimelineKeepAlivePod = Provider((ref) {
@@ -42,6 +49,22 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
 
   @override
   FutureOr<List<$atp.AtUri>> build() async {
+    // 削除
+    ref.listen(blueskySubscribePostDeletedPod, (_, uri) {
+      if (uri == null) return;
+      if (!state.hasValue) return;
+      state = AsyncData([...state.value!..remove(uri)]);
+    });
+    // 追加
+    final follows = await ref.watch(blueskySelfAndAllFollowsPod.future);
+    ref.listen(blueskySubscribePostCreatedPod, (_, uri) {
+      if (uri == null) return;
+      if (!state.hasValue) return;
+      if (follows.contains(uri.hostname)) {
+        state = AsyncData([uri, ...state.value!]);
+      }
+    });
+
     return await _fetch();
   }
 
