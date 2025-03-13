@@ -1,20 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ordered_set/ordered_set.dart';
 import '../../entity/bluesky/bluesky_actor.dart';
 import 'bluesky_actor_pod.dart';
 import 'bluesky_session_pod.dart';
 
 final blueskyFollowsPod = AsyncNotifierProvider.autoDispose
-    .family<BlueskyFollowsNotifier, List<String>, String>(
+    .family<BlueskyFollowsNotifier, OrderedSet<String>, String>(
       BlueskyFollowsNotifier.new,
       dependencies: [blueskyPod],
     );
 
 class BlueskyFollowsNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<String>, String> {
+    extends AutoDisposeFamilyAsyncNotifier<OrderedSet<String>, String> {
   @override
-  FutureOr<List<String>> build(String did) {
+  FutureOr<OrderedSet<String>> build(String did) {
     return _fetch();
   }
 
@@ -24,11 +25,11 @@ class BlueskyFollowsNotifier
     if (_cursor == null) {
       return true;
     }
-    state = AsyncData([...state.value!, ...await _fetch()]);
+    state = AsyncData(state.value!..addAll(await _fetch()));
     return false;
   }
 
-  Future<List<String>> _fetch() async {
+  Future<OrderedSet<String>> _fetch() async {
     final bluesky = await ref.watch(blueskyPod.future);
     final data = await bluesky.graph.getFollows(
       actor: arg,
@@ -43,6 +44,6 @@ class BlueskyFollowsNotifier
       );
     }
 
-    return follows.map((e) => e.did).toList();
+    return OrderedSet(null)..addAll(follows.map((e) => e.did));
   }
 }
