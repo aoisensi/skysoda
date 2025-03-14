@@ -9,13 +9,13 @@ final atprotoSubscribePod = StreamProvider<Null>((ref) async* {
   final subscribe = await atproto.sync.subscribeRepos();
   final onCreatePost = ref.watch(blueskySubscribePostCreatedPod.notifier);
   final onDeletePost = ref.watch(blueskySubscribePostDeletedPod.notifier);
-  // final onCreateRepost = ref.watch(blueskySubscribeRepostCreatedPod.notifier);
-  // final onDeleteRepost = ref.watch(blueskySubscribeRepostDeletedPod.notifier);
+  final onCreateRepost = ref.watch(blueskySubscribeRepostCreatedPod.notifier);
+  final onDeleteRepost = ref.watch(blueskySubscribeRepostDeletedPod.notifier);
   final repoCommitAdapter = RepoCommitAdaptor(
     onCreatePost: (data) => onCreatePost.state = data,
     onDeletePost: (data) => onDeletePost.state = data,
-    // onCreateRepost: (data) => onCreateRepost.state = data,
-    // onDeleteRepost: (data) => onDeleteRepost.state = data,
+    onCreateRepost: (data) => onCreateRepost.state = data,
+    onDeleteRepost: (data) => onDeleteRepost.state = data,
   );
   await for (final payload in subscribe.data.stream) {
     payload.maybeWhen(commit: repoCommitAdapter.execute, orElse: () {});

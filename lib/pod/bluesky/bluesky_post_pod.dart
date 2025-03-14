@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:atproto/core.dart' as $atp;
-import 'package:bluesky/core.dart';
+import 'package:bluesky/bluesky.dart' as $bsky;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../entity/bluesky/bluesky_post.dart';
 import '../../entity/bluesky/bluesky_actor.dart';
+import '../../entity/bluesky/bluesky_repost.dart';
 import 'bluesky_actor_pod.dart';
+import 'bluesky_repost_pod.dart';
 import 'bluesky_session_pod.dart';
 import 'bluesky_subscribe_pod.dart';
 
@@ -18,20 +20,21 @@ final blueskyPostPod = AsyncNotifierProvider.autoDispose
 class BlueskyPostNotifier
     extends AutoDisposeFamilyAsyncNotifier<BlueskyPost, $atp.AtUri> {
   @override
-  FutureOr<BlueskyPost> build(AtUri arg) async {
-    ref.listen(blueskySubscribePostDeletedPod, (_, uri) {
-      //  ref.invalidate(blueskyPostPod(uri!));
-      //  ref.invalidate(blueskyPostCachePod(uri));
+  FutureOr<BlueskyPost> build($atp.AtUri arg) async {
+    ref.listen(blueskySubscribePostDeletedPod, (_, commit) {
+      if (commit == null) return;
+      ref.invalidate(blueskyPostPod(commit.uri));
+      ref.invalidate(blueskyPostCachePod(commit.uri));
     });
     final value = ref.watch(blueskyPostCachePod(arg));
     if (value != null) {
       switch (value) {
         case AsyncLoading():
           return future;
-        case AsyncError error:
+        case AsyncError(:final error):
           throw error;
         case AsyncData(:final value):
-          ref.watch(blueskyActorPod(value.authorDid));
+          ref.watch(blueskyActorPod(value.did));
           return value;
       }
     }
@@ -39,9 +42,23 @@ class BlueskyPostNotifier
     final data = await bluesky.feed.getPosts(uris: [arg]);
     final cache = ref.watch(blueskyPostCachePod(arg).notifier);
     final post = BlueskyPost.fromPost(data.data.posts.first);
-    ref.watch(blueskyActorPod(post.authorDid));
+    ref.watch(blueskyActorPod(post.did));
     cache.state = AsyncData(post);
     return post;
+  }
+
+  static void storeFeedView(Ref ref, $bsky.FeedView v) {
+    final cache = ref.watch(blueskyPostCachePod(v.post.uri).notifier);
+    final post = BlueskyPost.fromPost(v.post);
+    cache.state = AsyncData(post);
+    switch (v.reason?.data) {
+      case $bsky.ReasonRepost reason:
+        final repost = BlueskyRepost(postUri: v.post.uri, did: reason.by.did);
+        final cache = ref.watch(
+          blueskyRepostCachePod((repost.postUri, repost.did)).notifier,
+        );
+        cache.state = AsyncData(repost);
+    }
   }
 
   static Future<void> fetchMultiple(Ref ref, List<$atp.AtUri> uris) async {
@@ -73,4 +90,6 @@ class BlueskyPostNotifier
 }
 
 final blueskyPostCachePod =
-    StateProvider.family<AsyncValue<BlueskyPost>?, AtUri>((ref, _) => null);
+    StateProvider.family<AsyncValue<BlueskyPost>?, $atp.AtUri>(
+      (ref, _) => null,
+    );

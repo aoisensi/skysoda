@@ -1,4 +1,3 @@
-import 'package:atproto/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,7 +9,7 @@ class ColumnTimelineView extends _ColumnFeedView {
   const ColumnTimelineView({super.key});
 
   @override
-  AsyncValue<List<AtUri>> watch(WidgetRef ref) => ref.watch(blueskyTimelinePod);
+  AsyncValue<List<Pid>> watch(WidgetRef ref) => ref.watch(blueskyTimelinePod);
 
   @override
   Future<bool> more(WidgetRef ref) =>
@@ -23,7 +22,7 @@ class ColumnAuthorFeedView extends _ColumnFeedView {
   final String did;
 
   @override
-  AsyncValue<List<AtUri>> watch(WidgetRef ref) =>
+  AsyncValue<List<Pid>> watch(WidgetRef ref) =>
       ref.watch(blueskyAuthorFeedPod(did));
 
   @override
@@ -34,7 +33,7 @@ class ColumnAuthorFeedView extends _ColumnFeedView {
 abstract class _ColumnFeedView extends HookConsumerWidget {
   const _ColumnFeedView({super.key});
 
-  AsyncValue<List<AtUri>> watch(WidgetRef ref);
+  AsyncValue<List<Pid>> watch(WidgetRef ref);
   Future<bool> more(WidgetRef ref);
 
   @override

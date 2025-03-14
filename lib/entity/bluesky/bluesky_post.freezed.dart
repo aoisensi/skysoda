@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BlueskyPost {
-  String get authorDid => throw _privateConstructorUsedError;
+  String get did => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
   AtUri get uri => throw _privateConstructorUsedError;
 
@@ -35,7 +35,7 @@ abstract class $BlueskyPostCopyWith<$Res> {
     $Res Function(BlueskyPost) then,
   ) = _$BlueskyPostCopyWithImpl<$Res, BlueskyPost>;
   @useResult
-  $Res call({String authorDid, String text, AtUri uri});
+  $Res call({String did, String text, AtUri uri});
 }
 
 /// @nodoc
@@ -52,17 +52,13 @@ class _$BlueskyPostCopyWithImpl<$Res, $Val extends BlueskyPost>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? authorDid = null,
-    Object? text = null,
-    Object? uri = null,
-  }) {
+  $Res call({Object? did = null, Object? text = null, Object? uri = null}) {
     return _then(
       _value.copyWith(
-            authorDid:
-                null == authorDid
-                    ? _value.authorDid
-                    : authorDid // ignore: cast_nullable_to_non_nullable
+            did:
+                null == did
+                    ? _value.did
+                    : did // ignore: cast_nullable_to_non_nullable
                         as String,
             text:
                 null == text
@@ -89,7 +85,7 @@ abstract class _$$BlueskyPostImplCopyWith<$Res>
   ) = __$$BlueskyPostImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String authorDid, String text, AtUri uri});
+  $Res call({String did, String text, AtUri uri});
 }
 
 /// @nodoc
@@ -105,17 +101,13 @@ class __$$BlueskyPostImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? authorDid = null,
-    Object? text = null,
-    Object? uri = null,
-  }) {
+  $Res call({Object? did = null, Object? text = null, Object? uri = null}) {
     return _then(
       _$BlueskyPostImpl(
-        authorDid:
-            null == authorDid
-                ? _value.authorDid
-                : authorDid // ignore: cast_nullable_to_non_nullable
+        did:
+            null == did
+                ? _value.did
+                : did // ignore: cast_nullable_to_non_nullable
                     as String,
         text:
             null == text
@@ -136,13 +128,13 @@ class __$$BlueskyPostImplCopyWithImpl<$Res>
 
 class _$BlueskyPostImpl implements _BlueskyPost {
   const _$BlueskyPostImpl({
-    required this.authorDid,
+    required this.did,
     required this.text,
     required this.uri,
   });
 
   @override
-  final String authorDid;
+  final String did;
   @override
   final String text;
   @override
@@ -150,7 +142,7 @@ class _$BlueskyPostImpl implements _BlueskyPost {
 
   @override
   String toString() {
-    return 'BlueskyPost(authorDid: $authorDid, text: $text, uri: $uri)';
+    return 'BlueskyPost(did: $did, text: $text, uri: $uri)';
   }
 
   @override
@@ -158,14 +150,13 @@ class _$BlueskyPostImpl implements _BlueskyPost {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BlueskyPostImpl &&
-            (identical(other.authorDid, authorDid) ||
-                other.authorDid == authorDid) &&
+            (identical(other.did, did) || other.did == did) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.uri, uri) || other.uri == uri));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, authorDid, text, uri);
+  int get hashCode => Object.hash(runtimeType, did, text, uri);
 
   /// Create a copy of BlueskyPost
   /// with the given fields replaced by the non-null parameter values.
@@ -178,13 +169,13 @@ class _$BlueskyPostImpl implements _BlueskyPost {
 
 abstract class _BlueskyPost implements BlueskyPost {
   const factory _BlueskyPost({
-    required final String authorDid,
+    required final String did,
     required final String text,
     required final AtUri uri,
   }) = _$BlueskyPostImpl;
 
   @override
-  String get authorDid;
+  String get did;
   @override
   String get text;
   @override
