@@ -5,13 +5,12 @@ import '../../pod/atproto/atproto_subscribe_pod.dart';
 import 'home/column/column_actors_view.dart';
 import 'home/column/column_feed_view.dart';
 
-final _podColumns = Provider<List<Widget>>((ref) {
-  return [
-    const ColumnTimelineView(),
-    const ColumnFollowsView(),
-    const ColumnFollowersView(),
-  ];
-});
+final List<ConsumerBuilder> _columnBuilders = [
+  (context, ref, child) => const ColumnTimelineView(),
+  (context, ref, child) => const ColumnFollowsView(),
+  (context, ref, child) => const ColumnFollowersView(),
+  (context, ref, child) => ColumnAuthorFeedView(ref.watch(atprotoDidPod)),
+];
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -38,7 +37,6 @@ class _LargeHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final columns = ref.watch(_podColumns);
     return Scaffold(
       body: ref
           .watch(atprotoSessionsPod)
@@ -47,14 +45,14 @@ class _LargeHomePage extends ConsumerWidget {
               return ListView(
                 scrollDirection: Axis.horizontal,
                 children:
-                    columns.map((builder) {
+                    _columnBuilders.map((builder) {
                       return SizedBox(
                         width: 360.0,
                         child: ProviderScope(
                           overrides: [
                             atprotoDidPod.overrideWithValue(sessions.first.did),
                           ],
-                          child: builder,
+                          child: Consumer(builder: builder),
                         ),
                       );
                     }).toList(),
@@ -72,7 +70,6 @@ class _SmallHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final columns = ref.watch(_podColumns);
     return Scaffold(
       body: ref
           .watch(atprotoSessionsPod)
@@ -80,12 +77,12 @@ class _SmallHomePage extends ConsumerWidget {
             data: (sessions) {
               return PageView(
                 children:
-                    columns.map((builder) {
+                    _columnBuilders.map((builder) {
                       return ProviderScope(
                         overrides: [
                           atprotoDidPod.overrideWithValue(sessions.first.did),
                         ],
-                        child: builder,
+                        child: Consumer(builder: builder),
                       );
                     }).toList(),
               );

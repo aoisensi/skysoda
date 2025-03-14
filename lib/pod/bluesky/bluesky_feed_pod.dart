@@ -12,59 +12,142 @@ import 'bluesky_actor_pod.dart';
 import 'bluesky_session_pod.dart';
 import 'bluesky_subscribe_pod.dart';
 
-final blueskyTimelinePod =
-    AsyncNotifierProvider<BlueskyTimelineNotifier, List<$atp.AtUri>>(
-      BlueskyTimelineNotifier.new,
-      dependencies: [
-        atprotoDidPod,
-        atprotoPod,
-        blueskyPod,
-        blueskySelfAndAllFollowsPod,
-      ],
-    );
+final blueskyTimelinePod = Provider((ref) {
+  final feed = ref.watch(blueskyTimelineNotifierPod(null));
+  // for keep alive
+  feed.valueOrNull?.forEach((uri) => ref.watch(blueskyPostPod(uri)));
+  return feed;
+}, dependencies: [blueskyTimelineNotifierPod, blueskyPostPod]);
 
-final blueskyTimelineKeepAlivePod = Provider((ref) {
-  for (final uri in ref.watch(blueskyTimelinePod).valueOrNull ?? []) {
-    ref.watch(blueskyPostPod(uri));
-  }
-}, dependencies: [blueskyTimelinePod, blueskyPostPod]);
+final blueskyTimelineNotifierPod = AsyncNotifierProvider.family<
+  BlueskyTimelineNotifier,
+  List<$atp.AtUri>,
+  Null
+>(
+  BlueskyTimelineNotifier.new,
+  dependencies: [
+    atprotoDidPod,
+    atprotoPod,
+    blueskyPod,
+    blueskySelfAndAllFollowsPod,
+  ],
+);
 
-class BlueskyTimelineNotifier extends _BlueskyFeedNotifier {
+final blueskyAuthorFeedPod = Provider.family((ref, String arg) {
+  final feed = ref.watch(blueskyAuthorFeedNotifierPod(arg));
+  feed.valueOrNull?.forEach((uri) => ref.watch(blueskyPostPod(uri)));
+  return feed;
+}, dependencies: [blueskyAuthorFeedNotifierPod, blueskyPostPod]);
+
+final blueskyAuthorFeedNotifierPod = AsyncNotifierProvider.family<
+  BlueskyAuthorFeedNotifier,
+  List<$atp.AtUri>,
+  String
+>(
+  BlueskyAuthorFeedNotifier.new,
+  dependencies: [atprotoDidPod, atprotoPod, blueskyPod],
+);
+
+class BlueskyTimelineNotifier extends _BlueskyFeedNotifier<Null> {
   @override
   Future<$atp.XRPCResponse<$bsky.Feed>> get(
     $bsky.Bluesky bluesky,
     String? cursor,
   ) {
-    return bluesky.feed.getTimeline(cursor: cursor);
+    return bluesky.feed.getTimeline(cursor: cursor, limit: 100);
+  }
+
+  @override
+  Future<void> subscribe() async {
+    final follows = await ref.watch(blueskySelfAndAllFollowsPod.future);
+    // 削除
+    ref.listen(blueskySubscribePostDeletedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      state = AsyncData([...state.value!..remove(commit.uri)]);
+    });
+    ref.listen(blueskySubscribeRepostDeletedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      state = AsyncData([...state.value!..remove(commit.uri)]);
+    });
+    // 追加
+    ref.listen(blueskySubscribePostCreatedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      if (follows.contains(commit.author)) {
+        ref.read(blueskyPostCachePod(commit.uri).notifier).state = AsyncData(
+          BlueskyPost.fromPostRecord(commit),
+        );
+        state = AsyncData([commit.uri, ...state.value!]);
+      }
+    });
+    ref.listen(blueskySubscribeRepostCreatedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      if (follows.contains(commit.author)) {
+        state = AsyncData([commit.uri, ...state.value!]);
+      }
+    });
   }
 }
 
-abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
+class BlueskyAuthorFeedNotifier extends _BlueskyFeedNotifier<String> {
+  @override
+  Future<$atp.XRPCResponse<$bsky.Feed>> get(
+    $bsky.Bluesky bluesky,
+    String? cursor,
+  ) {
+    return bluesky.feed.getAuthorFeed(actor: arg, limit: 100);
+  }
+
+  @override
+  Future<void> subscribe() async {
+    ref.listen(blueskySubscribePostDeletedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      state = AsyncData([...state.value!..remove(commit.uri)]);
+    });
+    ref.listen(blueskySubscribeRepostDeletedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      state = AsyncData([...state.value!..remove(commit.uri)]);
+    });
+    // 追加
+    ref.listen(blueskySubscribePostCreatedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      if (commit.author == arg) {
+        ref.read(blueskyPostCachePod(commit.uri).notifier).state = AsyncData(
+          BlueskyPost.fromPostRecord(commit),
+        );
+        state = AsyncData([commit.uri, ...state.value!]);
+      }
+    });
+    ref.listen(blueskySubscribeRepostCreatedPod, (_, commit) {
+      if (commit == null) return;
+      if (!state.hasValue) return;
+      if (commit.author == arg) {
+        state = AsyncData([commit.uri, ...state.value!]);
+      }
+    });
+  }
+}
+
+abstract class _BlueskyFeedNotifier<Arg>
+    extends FamilyAsyncNotifier<List<$atp.AtUri>, Arg> {
   Future<$atp.XRPCResponse<$bsky.Feed>> get(
     $bsky.Bluesky bluesky,
     String? cursor,
   );
 
+  Future<void> subscribe();
+
   String? _cursor;
 
   @override
-  FutureOr<List<$atp.AtUri>> build() async {
-    // 削除
-    ref.listen(blueskySubscribePostDeletedPod, (_, uri) {
-      if (uri == null) return;
-      if (!state.hasValue) return;
-      state = AsyncData([...state.value!..remove(uri)]);
-    });
-    // 追加
-    final follows = await ref.watch(blueskySelfAndAllFollowsPod.future);
-    ref.listen(blueskySubscribePostCreatedPod, (_, uri) {
-      if (uri == null) return;
-      if (!state.hasValue) return;
-      if (follows.contains(uri.hostname)) {
-        state = AsyncData([uri, ...state.value!]);
-      }
-    });
-
+  FutureOr<List<$atp.AtUri>> build(Arg arg) async {
+    await subscribe();
     return await _fetch();
   }
 
@@ -77,7 +160,7 @@ abstract class _BlueskyFeedNotifier extends AsyncNotifier<List<$atp.AtUri>> {
 
   Future<List<$atp.AtUri>> _fetch() async {
     final bluesky = await ref.watch(blueskyPod.future);
-    final data = await bluesky.feed.getTimeline(cursor: _cursor, limit: 100);
+    final data = await get(bluesky, _cursor);
     _cursor = data.data.cursor;
     for (final fv in data.data.feed) {
       final post = AsyncData(BlueskyPost.fromPost(fv.post));

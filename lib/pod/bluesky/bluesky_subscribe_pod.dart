@@ -1,5 +1,13 @@
-import 'package:bluesky/core.dart';
+import 'package:bluesky/bluesky.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final blueskySubscribePostDeletedPod = StateProvider<AtUri?>((ref) => null);
-final blueskySubscribePostCreatedPod = StateProvider<AtUri?>((ref) => null);
+final blueskySubscribePostCreatedPod =
+    StateProvider<RepoCommitCreate<PostRecord>?>((ref) => null);
+final blueskySubscribePostDeletedPod = StateProvider<RepoCommitDelete?>(
+  (ref) => null,
+);
+final blueskySubscribeRepostCreatedPod =
+    StateProvider<RepoCommitCreate<RepostRecord>?>((ref) => null);
+final blueskySubscribeRepostDeletedPod = StateProvider<RepoCommitDelete?>(
+  (ref) => null,
+);

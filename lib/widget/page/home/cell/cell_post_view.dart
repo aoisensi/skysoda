@@ -26,6 +26,10 @@ class CellPostView extends ConsumerWidget {
                     child: Text(post.text),
                   ),
                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(post.uri.toString()),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: PostActionsView(uri),
                   ),
